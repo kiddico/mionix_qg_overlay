@@ -8,13 +8,12 @@
 
 	<script>
 		/*
-
 			* Other things that need done
 				* round them thar corners
 				* current status of sensor/calibration
-					* active / idle / penging / ???
-
+					* active / idle / pending / ???
 		*/
+
 		var svg = d3.select("svg");
 		var max_heart_rate = 100,
 			tau    = 2 * Math.PI,
@@ -45,7 +44,6 @@
 		var bpm_text = svg.append("text")
 			.text("00 bpm")
 			.attr("font-family", "Consolas")
-//			.attr("font-family", "sans-serif")
 			.attr("font-size", font+"px")
 			.attr("dx",thickness + thickness*0.5)
 			.attr("dy",(width/2+(font/2)))
@@ -92,10 +90,8 @@
 
 		// Listen For Websockets on local host 7681.
 		// Requires Mionix Hub to be installed.
-		// There's no web server in your mouse, sorry.
 		var Socket = window.WebSocket || window.MozWebSocket;
-		// "mionix-beta" needs to be the protocol, or it won't respond.
-		// Their "protocol" is json. Next gen stuff.
+		// "mionix-beta" must be set as the protocol. It's just json. Chill.
 		var ws = new Socket("ws://localhost:7681", "mionix-beta");
 		ws.onmessage = function (message) {
 			var data = JSON.parse(message.data);
@@ -103,12 +99,10 @@
 				var bpm = JSON.stringify(data.heartRate),
 					avg = JSON.stringify(data.heartRateAvg),
 					max = JSON.stringify(data.heartRateMax);
-
 				// Adjust the heart rate ceiling
 				if(max != 0 && max > max_heart_rate){
 					max_heart_rate=max+10;
 				}
-
 				// If we have an up to date bpm use it,
 				// otherwise set to the average bpm.
 				// next transition should look better.
